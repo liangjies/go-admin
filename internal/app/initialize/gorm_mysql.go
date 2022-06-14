@@ -4,6 +4,7 @@ import (
 	"go-admin/internal/app/config"
 	"go-admin/internal/app/global"
 	"go-admin/internal/app/initialize/internal"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -28,6 +29,7 @@ func GormMysql() *gorm.DB {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(m.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
+		sqlDB.SetConnMaxLifetime(59 * time.Second)
 		return db
 	}
 }
