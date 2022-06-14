@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"go-admin/internal/app/model/example"
+
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -34,6 +35,7 @@ func RegisterTables(db *gorm.DB) {
 		system.SysBaseMenuBtn{},
 		system.SysAuthorityBtn{},
 		system.SysAutoCode{},
+		system.SysUserLogin{},
 
 		// 示例模块表
 		example.ExaFile{},
