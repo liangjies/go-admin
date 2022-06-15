@@ -13,6 +13,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
+	"github.com/mssola/user_agent"
 	"go.uber.org/zap"
 )
 
@@ -33,9 +34,12 @@ func (b *BaseApi) Login(c *gin.Context) {
 	// 登录信息
 	var sysUserLogin system.SysUserLogin
 	sysUserLogin.Username = l.Username
-	sysUserLogin.Ip = c.ClientIP()
+	sysUserLogin.IP = c.ClientIP()
 	sysUserLogin.Agent = c.Request.UserAgent()
-
+	ua := user_agent.New(c.Request.UserAgent())
+	sysUserLogin.LoginLocation, _, _ = global.SYS_IPQuery.QueryIP(c.ClientIP())
+	sysUserLogin.OS = ua.OS()
+	sysUserLogin.Browser, _ = ua.Browser()
 	if store.Verify(l.CaptchaId, l.Captcha, true) {
 		u := &system.SysUser{Username: l.Username, Password: l.Password}
 		if err, user := userService.Login(u); err != nil {

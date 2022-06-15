@@ -32,6 +32,9 @@ func Execute() {
 	global.BlackCache = local_cache.NewCache(
 		local_cache.SetDefaultExpire(time.Second * time.Duration(global.SYS_CONFIG.JWT.ExpiresTime)),
 	)
+	// 初始化IP data
+	global.SYS_IPQuery = initialize.QQWRT()
+
 	core.RunWindowsServer()
 
 }

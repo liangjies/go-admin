@@ -63,8 +63,8 @@ func (sysUserLoginService *SysUserLoginService) GetSysUserLoginInfoList(info sys
 	if info.Username != "" {
 		db = db.Where("username  LIKE ?", "%"+info.Username+"%")
 	}
-	if info.Ip != "" {
-		db = db.Where("ip LIKE ?", "%"+info.Ip+"%")
+	if info.IP != "" {
+		db = db.Where("ip LIKE ?", "%"+info.IP+"%")
 	}
 	if info.Status != 0 {
 		db = db.Where("status = ?", info.Status)
