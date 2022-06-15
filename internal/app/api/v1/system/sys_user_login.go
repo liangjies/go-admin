@@ -12,6 +12,8 @@ import (
 	"go.uber.org/zap"
 )
 
+type SysUserLoginApi struct{}
+
 // @Tags SysUserLogin
 // @Summary 创建SysUserLogin
 // @Security ApiKeyAuth
@@ -19,11 +21,11 @@ import (
 // @Produce application/json
 // @Param data body system.SysUserLogin true "创建SysUserLogin"
 // @Success 200 {object} response.Response{msg=string} "创建SysUserLogin"
-// @Router /SysUserLogin/createSysUserLogin [post]
-func (s *OperationRecordApi) CreateSysUserLogin(c *gin.Context) {
+// @Router /sysUserLogin/createSysUserLogin [post]
+func (s *SysUserLoginApi) CreateSysUserLogin(c *gin.Context) {
 	var SysUserLogin system.SysUserLogin
 	_ = c.ShouldBindJSON(&SysUserLogin)
-	if err := operationRecordService.CreateSysUserLogin(SysUserLogin); err != nil {
+	if err := sysUserLoginService.CreateSysUserLogin(SysUserLogin); err != nil {
 		global.SYS_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
@@ -38,11 +40,11 @@ func (s *OperationRecordApi) CreateSysUserLogin(c *gin.Context) {
 // @Produce application/json
 // @Param data body system.SysUserLogin true "SysUserLogin模型"
 // @Success 200 {object} response.Response{msg=string} "删除SysUserLogin"
-// @Router /SysUserLogin/deleteSysUserLogin [delete]
-func (s *OperationRecordApi) DeleteSysUserLogin(c *gin.Context) {
+// @Router /sysUserLogin/deleteSysUserLogin [delete]
+func (s *SysUserLoginApi) DeleteSysUserLogin(c *gin.Context) {
 	var SysUserLogin system.SysUserLogin
 	_ = c.ShouldBindJSON(&SysUserLogin)
-	if err := operationRecordService.DeleteSysUserLogin(SysUserLogin); err != nil {
+	if err := sysUserLoginService.DeleteSysUserLogin(SysUserLogin); err != nil {
 		global.SYS_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
@@ -57,11 +59,11 @@ func (s *OperationRecordApi) DeleteSysUserLogin(c *gin.Context) {
 // @Produce application/json
 // @Param data body request.IdsReq true "批量删除SysUserLogin"
 // @Success 200 {object} response.Response{msg=string} "批量删除SysUserLogin"
-// @Router /SysUserLogin/deleteSysUserLoginByIds [delete]
-func (s *OperationRecordApi) DeleteSysUserLoginByIds(c *gin.Context) {
+// @Router /sysUserLogin/deleteSysUserLoginByIds [delete]
+func (s *SysUserLoginApi) DeleteSysUserLoginByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
-	if err := operationRecordService.DeleteSysUserLoginByIds(IDS); err != nil {
+	if err := sysUserLoginService.DeleteSysUserLoginByIds(IDS); err != nil {
 		global.SYS_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
@@ -76,15 +78,15 @@ func (s *OperationRecordApi) DeleteSysUserLoginByIds(c *gin.Context) {
 // @Produce application/json
 // @Param data query system.SysUserLogin true "Id"
 // @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "用id查询SysUserLogin"
-// @Router /SysUserLogin/findSysUserLogin [get]
-func (s *OperationRecordApi) FindSysUserLogin(c *gin.Context) {
+// @Router /sysUserLogin/findSysUserLogin [get]
+func (s *SysUserLoginApi) FindSysUserLogin(c *gin.Context) {
 	var SysUserLogin system.SysUserLogin
 	_ = c.ShouldBindQuery(&SysUserLogin)
 	if err := utils.Verify(SysUserLogin, utils.IdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, reSysUserLogin := operationRecordService.GetSysUserLogin(SysUserLogin.ID); err != nil {
+	if err, reSysUserLogin := sysUserLoginService.GetSysUserLogin(SysUserLogin.ID); err != nil {
 		global.SYS_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
@@ -99,11 +101,11 @@ func (s *OperationRecordApi) FindSysUserLogin(c *gin.Context) {
 // @Produce application/json
 // @Param data query request.SysUserLoginSearch true "页码, 每页大小, 搜索条件"
 // @Success 200 {object} response.Response{data=response.PageResult,msg=string} "分页获取SysUserLogin列表,返回包括列表,总数,页码,每页数量"
-// @Router /SysUserLogin/getSysUserLoginList [get]
-func (s *OperationRecordApi) GetSysUserLoginList(c *gin.Context) {
+// @Router /sysUserLogin/getSysUserLoginList [get]
+func (s *SysUserLoginApi) GetSysUserLoginList(c *gin.Context) {
 	var pageInfo systemReq.SysUserLoginSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if err, list, total := operationRecordService.GetSysUserLoginInfoList(pageInfo); err != nil {
+	if err, list, total := sysUserLoginService.GetSysUserLoginInfoList(pageInfo); err != nil {
 		global.SYS_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

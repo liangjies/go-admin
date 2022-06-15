@@ -20,6 +20,6 @@ var (
 	SYS_VIP    *viper.Viper
 	SYS_LOG    *zap.Logger
 	SYS_Timer  timer.Timer = timer.NewTimerTask()
-
+	SYS_IPQuery 
 	BlackCache local_cache.Cache
 )

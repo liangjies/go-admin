@@ -3,7 +3,7 @@ package initialize
 import (
 	"net/http"
 
-	_ "go-admin/internal/app/docs"
+	_ "go-admin/docs"
 	"go-admin/internal/app/global"
 	"go-admin/internal/app/middleware"
 	"go-admin/internal/app/router"

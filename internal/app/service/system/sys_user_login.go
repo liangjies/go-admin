@@ -7,12 +7,14 @@ import (
 	systemReq "go-admin/internal/app/model/system/request"
 )
 
+type SysUserLoginService struct{}
+
 //@function: CreateSysUserLogin
 //@description: 创建记录
 //@param: SysUserLogin model.SysUserLogin
 //@return: err error
-func (operationRecordService *OperationRecordService) CreateSysUserLogin(SysUserLogin system.SysUserLogin) (err error) {
-	err = global.SYS_DB.Create(&SysUserLogin).Error
+func (sysUserLoginService *SysUserLoginService) CreateSysUserLogin(sysUserLogin system.SysUserLogin) (err error) {
+	err = global.SYS_DB.Create(&sysUserLogin).Error
 	return err
 }
 
@@ -21,7 +23,7 @@ func (operationRecordService *OperationRecordService) CreateSysUserLogin(SysUser
 //@param: ids request.IdsReq
 //@return: err error
 
-func (operationRecordService *OperationRecordService) DeleteSysUserLoginByIds(ids request.IdsReq) (err error) {
+func (sysUserLoginService *SysUserLoginService) DeleteSysUserLoginByIds(ids request.IdsReq) (err error) {
 	err = global.SYS_DB.Delete(&[]system.SysUserLogin{}, "id in (?)", ids.Ids).Error
 	return err
 }
@@ -31,8 +33,8 @@ func (operationRecordService *OperationRecordService) DeleteSysUserLoginByIds(id
 //@param: SysUserLogin model.SysUserLogin
 //@return: err error
 
-func (operationRecordService *OperationRecordService) DeleteSysUserLogin(SysUserLogin system.SysUserLogin) (err error) {
-	err = global.SYS_DB.Delete(&SysUserLogin).Error
+func (sysUserLoginService *SysUserLoginService) DeleteSysUserLogin(sysUserLogin system.SysUserLogin) (err error) {
+	err = global.SYS_DB.Delete(&sysUserLogin).Error
 	return err
 }
 
@@ -41,8 +43,8 @@ func (operationRecordService *OperationRecordService) DeleteSysUserLogin(SysUser
 //@param: id uint
 //@return: err error, SysUserLogin model.SysUserLogin
 
-func (operationRecordService *OperationRecordService) GetSysUserLogin(id uint) (err error, SysUserLogin system.SysUserLogin) {
-	err = global.SYS_DB.Where("id = ?", id).First(&SysUserLogin).Error
+func (sysUserLoginService *SysUserLoginService) GetSysUserLogin(id uint) (err error, sysUserLogin system.SysUserLogin) {
+	err = global.SYS_DB.Where("id = ?", id).First(&sysUserLogin).Error
 	return
 }
 
@@ -51,7 +53,7 @@ func (operationRecordService *OperationRecordService) GetSysUserLogin(id uint) (
 //@param: info systemReq.SysUserLoginSearch
 //@return: err error, list interface{}, total int64
 
-func (operationRecordService *OperationRecordService) GetSysUserLoginInfoList(info systemReq.SysUserLoginSearch) (err error, list interface{}, total int64) {
+func (sysUserLoginService *SysUserLoginService) GetSysUserLoginInfoList(info systemReq.SysUserLoginSearch) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db

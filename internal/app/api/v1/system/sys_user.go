@@ -25,19 +25,36 @@ import (
 func (b *BaseApi) Login(c *gin.Context) {
 	var l systemReq.Login
 	_ = c.ShouldBindJSON(&l)
+	// 校验登录信息是否完整
 	if err := utils.Verify(l, utils.LoginVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	// 登录信息
+	var sysUserLogin system.SysUserLogin
+	sysUserLogin.Username = l.Username
+	sysUserLogin.Ip = c.ClientIP()
+	sysUserLogin.Agent = c.Request.UserAgent()
+
 	if store.Verify(l.CaptchaId, l.Captcha, true) {
 		u := &system.SysUser{Username: l.Username, Password: l.Password}
 		if err, user := userService.Login(u); err != nil {
+			sysUserLogin.Status = 0
+			sysUserLogin.ErrorMessage = err.Error()
+			// 写入登录日志
+			go sysUserLoginService.CreateSysUserLogin(sysUserLogin)
 			global.SYS_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
 			response.FailWithMessage("用户名不存在或者密码错误", c)
 		} else {
+			sysUserLogin.Status = 1
+			// 写入登录日志
+			go sysUserLoginService.CreateSysUserLogin(sysUserLogin)
 			b.tokenNext(c, *user)
 		}
 	} else {
+		sysUserLogin.Status = 0
+		sysUserLogin.ErrorMessage = "验证码错误"
+		go sysUserLoginService.CreateSysUserLogin(sysUserLogin)
 		response.FailWithMessage("验证码错误", c)
 	}
 }
