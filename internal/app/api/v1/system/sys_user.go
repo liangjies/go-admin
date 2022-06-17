@@ -46,19 +46,19 @@ func (b *BaseApi) Login(c *gin.Context) {
 			sysUserLogin.Status = 0
 			sysUserLogin.ErrorMessage = err.Error()
 			// 写入登录日志
-			go sysUserLoginService.CreateSysUserLogin(sysUserLogin)
+			sysUserLoginService.CreateSysUserLogin(sysUserLogin)
 			global.SYS_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
 			response.FailWithMessage("用户名不存在或者密码错误", c)
 		} else {
 			sysUserLogin.Status = 1
 			// 写入登录日志
-			go sysUserLoginService.CreateSysUserLogin(sysUserLogin)
+			sysUserLoginService.CreateSysUserLogin(sysUserLogin)
 			b.tokenNext(c, *user)
 		}
 	} else {
 		sysUserLogin.Status = 0
 		sysUserLogin.ErrorMessage = "验证码错误"
-		go sysUserLoginService.CreateSysUserLogin(sysUserLogin)
+		sysUserLoginService.CreateSysUserLogin(sysUserLogin)
 		response.FailWithMessage("验证码错误", c)
 	}
 }
