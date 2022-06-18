@@ -69,6 +69,9 @@ func (sysUserLoginService *SysUserLoginService) GetSysUserLoginInfoList(info sys
 	if info.Status != 0 {
 		db = db.Where("status = ?", info.Status)
 	}
+	if len(info.DateRange) != 0 {
+		db = db.Where("created_at >=? AND created_at <=?", info.DateRange[0], info.DateRange[1])
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return

@@ -33,13 +33,13 @@ require (
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil v3.21.9+incompatible
+	github.com/shirou/gopsutil/v3 v3.22.5
 	github.com/songzhibin97/gkit v1.1.1
 	github.com/spf13/viper v1.7.0
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.8.2
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.19
-	github.com/tklauser/go-sysconf v0.3.9 // indirect
 	github.com/unrolled/secure v1.0.7
 	github.com/urfave/cli/v2 v2.8.1 // indirect
 	github.com/xuri/excelize/v2 v2.4.1

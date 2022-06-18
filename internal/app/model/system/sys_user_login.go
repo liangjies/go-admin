@@ -7,7 +7,7 @@ import (
 // 用户登录日志
 type SysUserLogin struct {
 	global.SYS_MODEL
-	Username      string `json:"userName" gorm:"comment:用户登录名"`                                                // 用户登录名
+	Username      string `json:"userName" form:"userName" gorm:"comment:用户登录名"`                                // 用户登录名
 	IP            string `json:"ip" form:"ip" gorm:"column:ip;comment:请求ip"`                                   // 请求ip
 	LoginLocation string `json:"loginLocation" form:"loginLocation" gorm:"column:login_location;comment:登录地点"` // 登录地点
 	OS            string `json:"os" form:"os" gorm:"column:os;comment:操作系统"`                                   // 操作系统

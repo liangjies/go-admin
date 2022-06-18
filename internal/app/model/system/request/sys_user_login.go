@@ -6,6 +6,7 @@ import (
 )
 
 type SysUserLoginSearch struct {
+	DateRange []string `json:"dateRange[]" form:"dateRange[]"` //日期范围
 	system.SysUserLogin
 	request.PageInfo
 }
