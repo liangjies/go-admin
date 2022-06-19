@@ -18,6 +18,7 @@ type ApiGroup struct {
 	DictionaryDetailApi
 	AuthorityBtnApi
 	SysUserLoginApi
+	SysMonitorApi
 }
 
 var (
@@ -37,4 +38,5 @@ var (
 	dictionaryDetailService = service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
 	authorityBtnService     = service.ServiceGroupApp.SystemServiceGroup.AuthorityBtnService
 	sysUserLoginService     = service.ServiceGroupApp.SystemServiceGroup.SysUserLoginService
+	sysMonitorService       = service.ServiceGroupApp.SystemServiceGroup.SysMonitorService
 )
