@@ -7,8 +7,9 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/aliyun/aliyun-oss-go-sdk v2.1.6+incompatible
 	github.com/aws/aws-sdk-go v1.42.27
-	github.com/casbin/casbin/v2 v2.11.0
+	github.com/casbin/casbin/v2 v2.40.6
 	github.com/casbin/gorm-adapter/v3 v3.0.2
+	github.com/casbin/redis-adapter/v2 v2.2.0
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/flipped-aurora/gva-plugins v0.0.0-20210828060501-fc8b729b9a4a
 	github.com/flipped-aurora/ws v1.0.2

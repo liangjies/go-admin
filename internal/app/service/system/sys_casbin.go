@@ -2,6 +2,7 @@ package system
 
 import (
 	"errors"
+	"fmt"
 	"sync"
 
 	"go-admin/internal/app/global"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
+	redisadapter "github.com/casbin/redis-adapter/v2"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -32,6 +34,8 @@ func (casbinService *CasbinService) UpdateCasbin(authorityId string, casbinInfos
 	if !success {
 		return errors.New("存在相同api,添加失败,请联系管理员")
 	}
+	// 更新全局变量
+	global.SYS_Enforcer = e
 	return nil
 }
 
@@ -45,6 +49,10 @@ func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath stri
 		"v1": newPath,
 		"v2": newMethod,
 	}).Error
+	if err != nil {
+		// 更新全局变量
+		casbinService.CasbinInit()
+	}
 	return err
 }
 
@@ -92,4 +100,47 @@ func (casbinService *CasbinService) Casbin() *casbin.SyncedEnforcer {
 	})
 	_ = syncedEnforcer.LoadPolicy()
 	return syncedEnforcer
+}
+
+//@function: CasbinRedis
+//@description: 从Redis获取Enforcer  引入自定义规则
+//@return: *casbin.Enforcer
+
+// var (
+// 	syncedEnforcer *casbin.SyncedEnforcer
+// 	once           sync.Once
+// )
+
+func (casbinService *CasbinService) CasbinRedis() *casbin.SyncedEnforcer {
+	once.Do(func() {
+		a := redisadapter.NewAdapterWithPassword("tcp", global.SYS_CONFIG.Redis.Addr, global.SYS_CONFIG.Redis.Password)
+		syncedEnforcer, _ = casbin.NewSyncedEnforcer(global.SYS_CONFIG.Casbin.ModelPath, a)
+	})
+	_ = syncedEnforcer.LoadPolicy()
+	return syncedEnforcer
+}
+
+//@function: CasbinInitRedis
+//@description: GORM到Redis  引入自定义规则
+//@return: *casbin.Enforcer
+func (casbinService *CasbinService) CasbinInitRedis() (err error) {
+	// 从 A 加载策略到内存
+	a, _ := gormadapter.NewAdapterByDB(global.SYS_DB)
+	e, _ := casbin.NewEnforcer(global.SYS_CONFIG.Casbin.ModelPath, a)
+	_ = e.LoadPolicy()
+	//  适配器A 转换为 B
+	// b := redisadapter.NewAdapterWithPassword("tcp", global.SYS_CONFIG.Redis.Addr, global.SYS_CONFIG.Redis.Password)
+	fmt.Println(global.SYS_CONFIG.Redis.Addr)
+	b := redisadapter.NewAdapter("tcp", global.SYS_CONFIG.Redis.Addr)
+	e.SetAdapter(b)
+	// // 将策略从内存保存到 B
+	err = e.SavePolicy()
+	return err
+}
+
+//@function: CasbinInitRedis
+//@description: 初始化Casbin到全局变量
+//@return: *casbin.Enforcer
+func (casbinService *CasbinService) CasbinInit() {
+	global.SYS_Enforcer = casbinService.Casbin()
 }

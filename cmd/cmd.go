@@ -4,11 +4,14 @@ import (
 	"go-admin/internal/app/core"
 	"go-admin/internal/app/global"
 	"go-admin/internal/app/initialize"
+	"go-admin/internal/app/service"
 	"time"
 
 	"github.com/songzhibin97/gkit/cache/local_cache"
 	"go.uber.org/zap"
 )
+
+var casbinService = service.ServiceGroupApp.SystemServiceGroup.CasbinService
 
 func Execute() {
 	// 初始化Viper
@@ -34,6 +37,15 @@ func Execute() {
 	)
 	// 初始化IP data
 	global.SYS_IPQuery = initialize.QQWRT()
+	// 初始化casbin
+	casbinService.CasbinInit()
+	/*
+		// 初始化casbin redis
+		if err := casbinService.CasbinInitRedis(); err != nil {
+			global.SYS_LOG.Error("casbin redis failed", zap.Error(err))
+			os.Exit(0)
+		}
+	*/
 
 	core.RunWindowsServer()
 
