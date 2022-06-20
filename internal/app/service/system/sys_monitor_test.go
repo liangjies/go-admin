@@ -19,6 +19,6 @@ func TestMonitor(t *testing.T) {
 	// val, _ := client.Get(ctx, "key").Result()
 	// fmt.Println(val)
 	fmt.Println(client.DBSize(ctx))
-	fmt.Println(client.Info(ctx, "Memory"))
-	fmt.Printf("%T", client.Info(ctx, "Stats").Val())
+	fmt.Println(client.Info(ctx, "Clients").Val())
+	// fmt.Printf("%T", client.Info(ctx, "Stats").Val())
 }

@@ -25,3 +25,19 @@ func (s *SysMonitorApi) GetRedisInfoCur(c *gin.Context) {
 		response.OkWithDetailed(reRedisInfoCur, "查询成功", c)
 	}
 }
+
+// @Tags GetRedisInfo
+// @Summary 获取Redis信息
+// @Security ApiKeyAuth
+// @Produce application/json
+// @Param
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "获取Redis信息"
+// @Router /sysMonitor/getRedisInfo [get]
+func (s *SysMonitorApi) GetRedisInfo(c *gin.Context) {
+	if reRedisInfo, err := sysMonitorService.GetRedisInfo(); err != nil {
+		global.SYS_LOG.Error("查询失败!", zap.Error(err))
+		response.FailWithMessage("查询失败", c)
+	} else {
+		response.OkWithDetailed(reRedisInfo, "查询成功", c)
+	}
+}

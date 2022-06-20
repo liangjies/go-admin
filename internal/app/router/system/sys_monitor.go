@@ -13,5 +13,7 @@ func (s *SysMonitorRouter) InitSysMonitorRouter(Router *gin.RouterGroup) {
 	sysMonitorApi := v1.ApiGroupApp.SystemApiGroup.SysMonitorApi
 	{
 		sysMonitorRouter.GET("getRedisInfoCur", sysMonitorApi.GetRedisInfoCur) // 获取实时redis信息
+		sysMonitorRouter.GET("getRedisInfo", sysMonitorApi.GetRedisInfo)       // 获取redis信息
+
 	}
 }
