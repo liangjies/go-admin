@@ -20,7 +20,7 @@ type SysMonitorApi struct{}
 func (s *SysMonitorApi) GetRedisInfoCur(c *gin.Context) {
 	if reRedisInfoCur, err := sysMonitorService.GetRedisInfoCur(); err != nil {
 		global.SYS_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+		response.FailWithMessage("查询失败 "+err.Error(), c)
 	} else {
 		response.OkWithDetailed(reRedisInfoCur, "查询成功", c)
 	}
@@ -36,7 +36,7 @@ func (s *SysMonitorApi) GetRedisInfoCur(c *gin.Context) {
 func (s *SysMonitorApi) GetRedisInfo(c *gin.Context) {
 	if reRedisInfo, err := sysMonitorService.GetRedisInfo(); err != nil {
 		global.SYS_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+		response.FailWithMessage("查询失败 "+err.Error(), c)
 	} else {
 		response.OkWithDetailed(reRedisInfo, "查询成功", c)
 	}
