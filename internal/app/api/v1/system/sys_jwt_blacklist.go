@@ -20,7 +20,7 @@ type JwtApi struct{}
 // @Router /jwt/jsonInBlacklist [post]
 func (j *JwtApi) JsonInBlacklist(c *gin.Context) {
 	token := c.Request.Header.Get("x-token")
-	jwt := system.JwtBlacklist{Jwt: token}
+	jwt := system.SysJwtBlacklist{Jwt: token}
 	if err := jwtService.JsonInBlacklist(jwt); err != nil {
 		global.SYS_LOG.Error("jwt作废失败!", zap.Error(err))
 		response.FailWithMessage("jwt作废失败", c)

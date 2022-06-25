@@ -19,6 +19,8 @@ type ApiGroup struct {
 	AuthorityBtnApi
 	SysUserLoginApi
 	SysMonitorApi
+	SysJobsApi
+	SysJobLogsApi
 }
 
 var (

@@ -103,7 +103,7 @@ func (b *BaseApi) tokenNext(c *gin.Context, user system.SysUser) {
 		global.SYS_LOG.Error("设置登录状态失败!", zap.Error(err))
 		response.FailWithMessage("设置登录状态失败", c)
 	} else {
-		var blackJWT system.JwtBlacklist
+		var blackJWT system.SysJwtBlacklist
 		blackJWT.Jwt = jwtStr
 		if err := jwtService.JsonInBlacklist(blackJWT); err != nil {
 			response.FailWithMessage("jwt作废失败", c)

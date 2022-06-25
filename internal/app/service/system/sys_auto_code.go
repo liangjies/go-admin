@@ -28,7 +28,7 @@ import (
 
 const (
 	autoPath           = "autocode_template/"
-	autocodePath       = "resource/autocode_template"
+	autocodePath       = "internal/app/resource/autocode_template"
 	plugPath           = "resource/plug_template"
 	packageService     = "service/%s/enter.go"
 	packageServiceName = "service"

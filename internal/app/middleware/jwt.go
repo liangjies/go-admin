@@ -46,7 +46,7 @@ func JWTAuth() gin.HandlerFunc {
 		}
 		// 用户被删除的逻辑 需要优化 此处比较消耗性能 如果需要 请自行打开
 		//if err, _ = userService.FindUserByUuid(claims.UUID.String()); err != nil {
-		//	_ = jwtService.JsonInBlacklist(system.JwtBlacklist{Jwt: token})
+		//	_ = jwtService.JsonInBlacklist(system.SysJwtBlacklist{Jwt: token})
 		//	response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
 		//	c.Abort()
 		//}
@@ -61,7 +61,7 @@ func JWTAuth() gin.HandlerFunc {
 				if err != nil {
 					global.SYS_LOG.Error("get redis jwt failed", zap.Error(err))
 				} else { // 当之前的取成功时才进行拉黑操作
-					_ = jwtService.JsonInBlacklist(system.JwtBlacklist{Jwt: RedisJwtToken})
+					_ = jwtService.JsonInBlacklist(system.SysJwtBlacklist{Jwt: RedisJwtToken})
 				}
 				// 无论如何都要记录当前的活跃状态
 				_ = jwtService.SetRedisJWT(newToken, newClaims.Username)

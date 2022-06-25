@@ -166,7 +166,7 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 	}
 	err := autoCodeService.CreateAutoCode(&a)
 	if err != nil {
-		global.SYS_LOG.Error("创建成功!", zap.Error(err))
+		global.SYS_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)

@@ -18,4 +18,6 @@ type ServiceGroup struct {
 	AuthorityBtnService
 	SysUserLoginService
 	SysMonitorService
+	SysJobsService
+	SysJobLogsService
 }

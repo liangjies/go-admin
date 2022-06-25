@@ -25,7 +25,7 @@ func RegisterTables(db *gorm.DB) {
 		system.SysApi{},
 		system.SysUser{},
 		system.SysBaseMenu{},
-		system.JwtBlacklist{},
+		system.SysJwtBlacklist{},
 		system.SysAuthority{},
 		system.SysDictionary{},
 		system.SysOperationRecord{},
@@ -36,7 +36,8 @@ func RegisterTables(db *gorm.DB) {
 		system.SysAuthorityBtn{},
 		system.SysAutoCode{},
 		system.SysUserLogin{},
-
+		system.SysJob{},
+		system.SysJobLog{},
 		// 示例模块表
 		example.ExaFile{},
 		example.ExaCustomer{},

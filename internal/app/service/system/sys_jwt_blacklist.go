@@ -14,10 +14,10 @@ type JwtService struct{}
 
 //@function: JsonInBlacklist
 //@description: 拉黑jwt
-//@param: jwtList model.JwtBlacklist
+//@param: jwtList model.SysJwtBlacklist
 //@return: err error
 
-func (jwtService *JwtService) JsonInBlacklist(jwtList system.JwtBlacklist) (err error) {
+func (jwtService *JwtService) JsonInBlacklist(jwtList system.SysJwtBlacklist) (err error) {
 	err = global.SYS_DB.Create(&jwtList).Error
 	if err != nil {
 		return
@@ -34,7 +34,7 @@ func (jwtService *JwtService) JsonInBlacklist(jwtList system.JwtBlacklist) (err 
 func (jwtService *JwtService) IsBlacklist(jwt string) bool {
 	_, ok := global.BlackCache.Get(jwt)
 	return ok
-	// err := global.SYS_DB.Where("jwt = ?", jwt).First(&system.JwtBlacklist{}).Error
+	// err := global.SYS_DB.Where("jwt = ?", jwt).First(&system.SysJwtBlacklist{}).Error
 	// isNotFound := errors.Is(err, gorm.ErrRecordNotFound)
 	// return !isNotFound
 }
@@ -63,7 +63,7 @@ func (jwtService *JwtService) SetRedisJWT(jwt string, userName string) (err erro
 
 func LoadAll() {
 	var data []string
-	err := global.SYS_DB.Model(&system.JwtBlacklist{}).Select("jwt").Find(&data).Error
+	err := global.SYS_DB.Model(&system.SysJwtBlacklist{}).Select("jwt").Find(&data).Error
 	if err != nil {
 		global.SYS_LOG.Error("加载数据库jwt黑名单失败!", zap.Error(err))
 		return

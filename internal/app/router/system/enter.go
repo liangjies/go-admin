@@ -16,4 +16,6 @@ type RouterGroup struct {
 	DictionaryDetailRouter
 	AuthorityBtnRouter
 	SysMonitorRouter
+	SysJobsRouter
+	SysJobLogsRouter
 }

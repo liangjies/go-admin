@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -136,6 +137,9 @@ func Verify(st interface{}, roleMap Rules) (err error) {
 					}
 				case strings.Split(v, "=")[0] == "regexp":
 					if !regexpMatch(strings.Split(v, "=")[1], val.String()) {
+						fmt.Println(strings.Split(v, "=")[1])
+						fmt.Println(val.String())
+						fmt.Println(regexpMatch(strings.Split(v, "=")[1], val.String()))
 						return errors.New(tagVal.Name + "格式校验不通过")
 					}
 				case compareMap[strings.Split(v, "=")[0]]:
