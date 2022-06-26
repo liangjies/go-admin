@@ -7,6 +7,7 @@ import (
 	"go-admin/internal/app/model/system"
 	systemReq "go-admin/internal/app/model/system/request"
 	"go-admin/internal/app/service"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -118,5 +119,24 @@ func (sysJobLogsApi *SysJobLogsApi) GetSysJobLogsList(c *gin.Context) {
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
+	}
+}
+
+// @Tags SysJobLogs
+// @Summary 清空日志
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body system.SysJobLog true "清空日志"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"清空成功"}"
+// @Router /sysJobLogs/clearSysJobLogs [delete]
+func (sysJobLogsApi *SysJobLogsApi) ClearSysJobLogs(c *gin.Context) {
+	var cleanJobLogParams systemReq.CleanJobLogParams
+	_ = c.ShouldBindJSON(&cleanJobLogParams)
+	if err, count := sysJobLogsService.ClearSysJobLogs(cleanJobLogParams); err != nil {
+		global.SYS_LOG.Error("清空失败!", zap.Error(err))
+		response.FailWithMessage("清空失败", c)
+	} else {
+		response.OkWithMessage("清理成功,共清理"+strconv.Itoa(int(count))+"行", c)
 	}
 }

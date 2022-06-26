@@ -7,8 +7,7 @@ import (
     {{.Package}}Req "go-admin/internal/app/model/{{.Package}}/request"
 )
 
-type {{.StructName}}Service struct {
-}
+type {{.StructName}}Service struct {}
 
 // Create{{.StructName}} 创建{{.StructName}}记录
 // Author [liangjies]

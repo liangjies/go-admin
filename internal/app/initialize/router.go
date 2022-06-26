@@ -69,6 +69,7 @@ func Routers() *gin.Engine {
 		systemRouter.InitSysUserLoginRouter(PrivateGroup)        // 登录记录
 		systemRouter.InitSysMonitorRouter(PrivateGroup)          // Redis信息
 		systemRouter.InitSysJobsRouter(PrivateGroup)             // 定时任务
+		systemRouter.InitSysJobLogsRouter(PrivateGroup)          // 定时任务日志
 
 		exampleRouter.InitExcelRouter(PrivateGroup)                 // 表格导入导出
 		exampleRouter.InitCustomerRouter(PrivateGroup)              // 客户路由

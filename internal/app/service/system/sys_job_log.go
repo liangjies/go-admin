@@ -42,10 +42,38 @@ func (sysJobLogsService *SysJobLogsService) GetSysJobLogsInfoList(info systemReq
 	db := global.SYS_DB.Model(&system.SysJobLog{})
 	var sysJobLogss []system.SysJobLog
 	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.JobName != "" {
+		db = db.Where("job_name LIKE ?", "%"+info.JobName+"%")
+	}
+	if info.JobId != 0 {
+		db = db.Where("Job_id = ?", info.JobId)
+	}
+	if info.Status != 0 {
+		db = db.Where("status = ?", info.Status)
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}
-	err = db.Limit(limit).Offset(offset).Find(&sysJobLogss).Error
+	err = db.Limit(limit).Offset(offset).Order("id desc").Find(&sysJobLogss).Error
 	return err, sysJobLogss, total
+}
+
+// 清空日志
+func (sysJobLogsService *SysJobLogsService) ClearSysJobLogs(info systemReq.CleanJobLogParams) (err error, total int64) {
+	// 创建db
+	db := global.SYS_DB.Model(&system.SysJobLog{})
+	var sysJobLogss []system.SysJobLog
+	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.JobName != "" {
+		db = db.Where("job_name LIKE ?", "%"+info.JobName+"%")
+	}
+	if info.JobId != 0 {
+		db = db.Where("Job_id = ?", info.JobId)
+	}
+	if info.Status != 0 {
+		db = db.Where("status = ?", info.Status)
+	}
+	res := db.Delete(&sysJobLogss)
+	return res.Error, res.RowsAffected
 }

@@ -16,5 +16,5 @@ var (
 	OldAuthorityVerify     = Rules{"OldAuthorityId": {NotEmpty()}}
 	ChangePasswordVerify   = Rules{"Username": {NotEmpty()}, "Password": {NotEmpty()}, "NewPassword": {NotEmpty()}}
 	SetUserAuthorityVerify = Rules{"AuthorityId": {NotEmpty()}}
-	JobVerify              = Rules{"JobName": {NotEmpty()}, "JobGroup": {NotEmpty()}, "InvokeTarget": {NotEmpty()}, "CronExpression": {RegexpMatch(`^(((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7}$`)}}
+	JobVerify              = Rules{"JobName": {NotEmpty()}, "JobGroup": {NotEmpty()}, "InvokeTarget": {NotEmpty()}, "CronExpression": {RegexpMatch(`^(@(annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\d+(ns|us|µs|ms|s|m|h))+)|((((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7})$`)}}
 )

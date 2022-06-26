@@ -1,6 +1,7 @@
 package system
 
 import (
+	"fmt"
 	"go-admin/internal/app/global"
 	"go-admin/internal/app/model/common/request"
 	"go-admin/internal/app/model/system"
@@ -62,4 +63,14 @@ func (sysJobsService *SysJobsService) GetSysJobsInfoList(info systemReq.SearchJo
 	}
 	err = db.Limit(limit).Offset(offset).Find(&sysJobss).Error
 	return err, sysJobss, total
+}
+
+// 获取状态为正常的所有定时任务
+func (sysJobsService *SysJobsService) GetSysJobsList() (err error, sysJobs []system.SysJob) {
+	err = global.SYS_DB.Where("status = ?", 1).Find(&sysJobs).Error
+	return
+}
+
+func (sysJobsService *SysJobsService) JobTest() {
+	fmt.Println("调用成功")
 }
