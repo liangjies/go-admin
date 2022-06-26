@@ -15,6 +15,7 @@ type Timer interface {
 	Remove(taskName string, id int)
 	Clear(taskName string)
 	Close()
+	ClearAndClose()
 }
 
 // timer 定时任务管理
@@ -99,6 +100,16 @@ func (t *timer) Close() {
 	for _, v := range t.taskList {
 		v.Stop()
 	}
+}
+
+// 清空并释放资源
+func (t *timer) ClearAndClose() {
+	t.Lock()
+	defer t.Unlock()
+	for _, v := range t.taskList {
+		v.Stop()
+	}
+	t.taskList = make(map[string]*cron.Cron)
 }
 
 func NewTimerTask() Timer {

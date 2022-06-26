@@ -5,6 +5,7 @@ import (
 	"go-admin/internal/app/model/common/request"
 	"go-admin/internal/app/model/system"
 	systemReq "go-admin/internal/app/model/system/request"
+	"time"
 )
 
 type SysJobLogsService struct {
@@ -74,6 +75,17 @@ func (sysJobLogsService *SysJobLogsService) ClearSysJobLogs(info systemReq.Clean
 	if info.Status != 0 {
 		db = db.Where("status = ?", info.Status)
 	}
+	nowTime := time.Now()
+	if info.Time == "week" {
+		// 清理一周前的数据
+		time := nowTime.AddDate(0, 0, -7)
+		db = db.Where("create_time < ?", time)
+	} else if info.Time == "month" {
+		// 清理一月前的数据
+		time := nowTime.AddDate(0, -1, 0)
+		db = db.Where("create_time < ?", time)
+	}
+
 	res := db.Delete(&sysJobLogss)
 	return res.Error, res.RowsAffected
 }

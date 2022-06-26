@@ -19,6 +19,7 @@ func (s *SysJobLogsRouter) InitSysJobLogsRouter(Router *gin.RouterGroup) {
 		sysJobLogsRouter.POST("createSysJobLogs", sysJobLogsApi.CreateSysJobLogs)             // 新建SysJobLogs
 		sysJobLogsRouter.DELETE("deleteSysJobLogs", sysJobLogsApi.DeleteSysJobLogs)           // 删除SysJobLogs
 		sysJobLogsRouter.DELETE("deleteSysJobLogsByIds", sysJobLogsApi.DeleteSysJobLogsByIds) // 批量删除SysJobLogs
+		sysJobLogsRouter.DELETE("clearSysJobLogs", sysJobLogsApi.ClearSysJobLogs)             // 清理运行日志
 	}
 	{
 		sysJobLogsRouterWithoutRecord.GET("findSysJobLogs", sysJobLogsApi.FindSysJobLogs)       // 根据ID获取SysJobLogs
