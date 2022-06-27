@@ -13,8 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type SysJobsApi struct {
-}
+type SysJobsApi struct{}
 
 var sysJobsService = service.ServiceGroupApp.SystemServiceGroup.SysJobsService
 
@@ -148,5 +147,25 @@ func (sysJobsApi *SysJobsApi) GetSysJobsList(c *gin.Context) {
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
+	}
+}
+
+// RunSysJobs 运行定时任务
+// @Tags SysJobs
+// @Summary 运行定时任务
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body system.SysJobs true "运行定时任务"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"运行成功"}"
+// @Router /sysJobs/runSysJobs [post]
+func (sysJobsApi *SysJobsApi) RunSysJob(c *gin.Context) {
+	var sysJob system.SysJob
+	_ = c.ShouldBindJSON(&sysJob)
+	if err := sysJobsService.RunSysJob(sysJob); err != nil {
+		global.SYS_LOG.Error("运行失败!", zap.Error(err))
+		response.FailWithMessage("运行失败", c)
+	} else {
+		response.OkWithMessage("运行成功，运行情况请查看任务日志", c)
 	}
 }

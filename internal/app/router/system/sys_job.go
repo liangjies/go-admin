@@ -19,6 +19,7 @@ func (s *SysJobsRouter) InitSysJobsRouter(Router *gin.RouterGroup) {
 		sysJobsRouter.DELETE("deleteSysJobs", sysJobsApi.DeleteSysJobs)           // 删除SysJobs
 		sysJobsRouter.DELETE("deleteSysJobsByIds", sysJobsApi.DeleteSysJobsByIds) // 批量删除SysJobs
 		sysJobsRouter.PUT("updateSysJobs", sysJobsApi.UpdateSysJobs)              // 更新SysJobs
+		sysJobsRouter.POST("runSysJob", sysJobsApi.RunSysJob)                     // 运行定时任务
 	}
 	{
 		sysJobsRouterWithoutRecord.GET("findSysJobs", sysJobsApi.FindSysJobs)       // 根据ID获取SysJobs

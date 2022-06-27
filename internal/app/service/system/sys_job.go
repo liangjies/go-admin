@@ -113,6 +113,23 @@ func (sysJobsService *SysJobsService) GetSysJobsList() (err error, sysJobs []sys
 	return
 }
 
+// 运行指定定时任务
+func (sysJobsService *SysJobsService) RunSysJob(sysJob system.SysJob) (err error) {
+	defer func() {
+		if reflectErr := recover(); reflectErr != nil {
+			err = reflectErr.(error)
+		}
+	}()
+	switch sysJob.JobType {
+	case 1:
+		ExecuteRESTful(sysJob)
+	case 2:
+		ExecuteMethod(sysJob)
+	}
+	return err
+}
+
+// 初始化定时任务
 func (sysJobsService *SysJobsService) InitTimer() {
 	if global.SYS_CONFIG.Timer.Start {
 		// 获取所有定时任务
@@ -167,11 +184,10 @@ func InitOneTimer(sysJob system.SysJob) {
 func ExecuteMethod(sysJob system.SysJob) {
 	var sysJobLogsService SysJobLogsService
 	var sysJobLog system.SysJobLog
-	// 开始时间
-	startTime := time.Now()
-	var count = 0
-	var err error
-	var res string
+
+	startTime := time.Now() // 开始时间
+	var err error           // 错误信息
+	var res string          // 返回结果
 	// 发送请求
 	res, err = systemTask.ScheduleTaskRun(sysJob.InvokeTarget)
 	// 结束时间
@@ -182,7 +198,6 @@ func ExecuteMethod(sysJob system.SysJob) {
 		sysJobLog.JobMessage = err.Error()
 		sysJobLog.Status = 2
 	} else {
-		count++
 		sysJobLog.JobMessage = res
 		sysJobLog.Status = 1
 	}
@@ -200,12 +215,11 @@ func ExecuteRESTful(sysJob system.SysJob) {
 	var sysJobLogsService SysJobLogsService
 	var sysJobLog system.SysJobLog
 	// 开始时间
-	startTime := time.Now()
-	var count = 0
-	var err error
-	var str string
+	startTime := time.Now() // 开始时间
+	var err error           // 错误信息
+	var res string          // 返回结果
 	// 发送请求
-	str, err = Get(sysJob.InvokeTarget)
+	res, err = Get(sysJob.InvokeTarget)
 	// 结束时间
 	endTime := time.Now()
 	// 执行时间
@@ -214,8 +228,7 @@ func ExecuteRESTful(sysJob system.SysJob) {
 		sysJobLog.JobMessage = err.Error()
 		sysJobLog.Status = 2
 	} else {
-		count++
-		sysJobLog.JobMessage = str
+		sysJobLog.JobMessage = res
 		sysJobLog.Status = 1
 	}
 	// 保存日志
@@ -231,21 +244,20 @@ func ExecuteRESTful(sysJob system.SysJob) {
 // url：         请求地址
 // response：    请求返回的内容
 func Get(url string) (string, error) {
-	client := &http.Client{}
+	// 超时时间：60秒
+	client := &http.Client{Timeout: time.Second * 60}
 	req, err := http.NewRequest("GET", url, nil)
 	req.Header.Set("Accept", "*/*")
 	req.Header.Set("Content-Type", "application/json")
 	if err != nil {
 		return "", err
 	}
-
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", err
 	}
 	defer resp.Body.Close()
 	result, _ := ioutil.ReadAll(resp.Body)
-
 	return string(result), nil
 }
 
@@ -255,16 +267,14 @@ func Get(url string) (string, error) {
 // contentType： 请求体格式，如：application/json
 // content：     请求放回的内容
 func Post(url string, data interface{}, contentType string) ([]byte, error) {
-	// 超时时间：5秒
-	client := &http.Client{Timeout: 5 * time.Second}
+	// 超时时间：60秒
+	client := &http.Client{Timeout: 60 * time.Second}
 	jsonStr, _ := json.Marshal(data)
 	resp, err := client.Post(url, contentType, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
-
 	result, _ := ioutil.ReadAll(resp.Body)
 	return result, nil
-
 }
