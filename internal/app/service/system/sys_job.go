@@ -7,6 +7,7 @@ import (
 	"go-admin/internal/app/model/common/request"
 	"go-admin/internal/app/model/system"
 	systemReq "go-admin/internal/app/model/system/request"
+	systemTask "go-admin/internal/app/task/system"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -146,10 +147,52 @@ func InitOneTimer(sysJob system.SysJob) {
 			sysJobsService.SysUpdateSysJobs(sysJob)
 		}(sysJob)
 	case 2:
-		// TODO: 定时任务
+		go func(sysJob system.SysJob) {
+			EntryId, err := global.SYS_Timer.AddTaskByFunc(strconv.FormatUint(uint64(sysJob.ID), 10), sysJob.CronExpression, func() {
+				ExecuteMethod(sysJob)
+			})
+			// 运行错误更改任务状态
+			if err != nil {
+				sysJob.Status = 3
+			}
+			sysJob.EntryId = int(EntryId)
+			sysJobsService.SysUpdateSysJobs(sysJob)
+		}(sysJob)
 	default:
 		global.SYS_LOG.Error("定时任务类型错误，任务名称：" + sysJob.JobName)
 	}
+}
+
+// 执行运行方法
+func ExecuteMethod(sysJob system.SysJob) {
+	var sysJobLogsService SysJobLogsService
+	var sysJobLog system.SysJobLog
+	// 开始时间
+	startTime := time.Now()
+	var count = 0
+	var err error
+	var res string
+	// 发送请求
+	res, err = systemTask.ScheduleTaskRun(sysJob.InvokeTarget)
+	// 结束时间
+	endTime := time.Now()
+	// 执行时间
+	sysJobLog.Latency = endTime.Sub(startTime)
+	if err != nil {
+		sysJobLog.JobMessage = err.Error()
+		sysJobLog.Status = 2
+	} else {
+		count++
+		sysJobLog.JobMessage = res
+		sysJobLog.Status = 1
+	}
+	// 保存日志
+	sysJobLog.JobId = sysJob.ID
+	sysJobLog.JobName = sysJob.JobName
+	sysJobLog.JobType = sysJob.JobType
+	sysJobLog.InvokeTarget = sysJob.InvokeTarget
+	sysJobLog.CreateTime = time.Now()
+	_ = sysJobLogsService.CreateSysJobLogs(sysJobLog)
 }
 
 // 执行RESTful请求
