@@ -34,6 +34,7 @@ type Os struct {
 	Compiler        string `json:"compiler"`
 	GoVersion       string `json:"goVersion"`
 	NumGoroutine    int    `json:"numGoroutine"`
+	RunTime         uint   `json:"runTime"`
 }
 
 type Cpu struct {
@@ -79,6 +80,9 @@ func InitOS() (o Os) {
 	o.Compiler = runtime.Compiler
 	o.GoVersion = runtime.Version()
 	o.NumGoroutine = runtime.NumGoroutine()
+	// 程序运行时间
+	// 计算开始和现在时间差
+	o.RunTime = uint(time.Since(global.SYS_StartTime).Minutes())
 	return o
 }
 

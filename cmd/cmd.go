@@ -24,6 +24,8 @@ func Execute() {
 	global.SYS_DB = initialize.Gorm()
 	// 初始化定时器
 	initialize.Timer()
+	// 记录开始时间
+	global.SYS_StartTime = time.Now()
 	// 初始化数据库
 	if global.SYS_DB != nil {
 		initialize.RegisterTables(global.SYS_DB) // 初始化表
